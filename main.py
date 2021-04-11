@@ -17,9 +17,13 @@ with open('model.pkl', 'rb') as f:
     model = pickle.load(f)
 
 
-def find_popularity_comparisons():
+def find_popularity_comparisons(pop):
     df = pd.read_csv("dataset\data.csv")
     df = df[['id', 'name', 'artists', 'popularity']]
+    df_sort = df.iloc[(df['popularity']-pop).abs().argsort()[:5]]
+    indices = df_sort.index.tolist()
+    similar = [df['name'][x] for x in indices]
+    return similar
 
 
 def get_track_id(artist, search_query):
@@ -62,8 +66,11 @@ def predict_pop(artist, search_query):
 def main():
     artist = input('Enter name of artist: ')
     search_query = input('Enter name of song: ')
-
-    print(f'The predicted popularity is {round(predict_pop(artist, search_query))}/100')
+    pop = round(predict_pop(artist, search_query))
+    similar_songs = find_popularity_comparisons(pop)
+    print(f'The predicted popularity is {pop}/100')
+    print("Similar Songs (Based on Popularity) Include:")
+    print("\n".join(similar_songs))
 
 
 if __name__ == '__main__':
