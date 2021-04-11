@@ -1,11 +1,12 @@
-import spotipy
-from spotipy.oauth2 import SpotifyClientCredentials, SpotifyOAuth
+import numpy as np
 import pandas as pd
+import pickle
 from sklearn.linear_model import LinearRegression
 from sklearn.model_selection import train_test_split
 from sklearn import preprocessing
-import numpy as np
-import pickle
+import spotipy
+from spotipy.oauth2 import SpotifyClientCredentials, SpotifyOAuth
+
 from config import *
 
 client_credentials_manager = SpotifyClientCredentials(
@@ -68,6 +69,7 @@ def main():
     search_query = input('Enter name of song: ')
     pop = round(predict_pop(artist, search_query))
     similar_songs = find_popularity_comparisons(pop)
+    
     print(f'The predicted popularity is {pop}/100')
     print("Similar Songs (Based on Popularity) Include:")
     print("\n".join(similar_songs))
