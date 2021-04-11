@@ -20,7 +20,7 @@ with open('model.pkl', 'rb') as f:
 
 def find_popularity_comparisons(pop):
     df = pd.read_csv("dataset\data.csv")
-    df = df[['id', 'name', 'artists', 'popularity']]
+    df = df[['name', 'popularity']]
     df_sort = df.iloc[(df['popularity']-pop).abs().argsort()[:5]]
     indices = df_sort.index.tolist()
     similar = [df['name'][x] for x in indices]
