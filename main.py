@@ -31,12 +31,13 @@ def get_track_id(artist, search_query):
     searchResults = spotify.search(
         q="artist:" + artist + " track:" + search_query, type="track")
     id = searchResults['tracks']['items'][0]['id']
-    pop = searchResults['tracks']['items'][0]['popularity']
-    return id, pop
+    pop = searchResults['tracks']['items'][0]['popularity'] 
+    year = int(searchResults['tracks']['items'][0]['album']['release_date'][:4])
+    return id, year, pop
 
 
 def get_features(artist, search_query):
-    track_id, popularity = get_track_id(artist, search_query)
+    track_id, year, popularity = get_track_id(artist, search_query)
     all_features = spotify.audio_features(track_id)[0]
     features = {}
     features['acousticness'] = all_features['acousticness']
@@ -52,14 +53,16 @@ def get_features(artist, search_query):
     features['tempo'] = all_features['tempo']
     features['valence'] = all_features['valence']
     features['popularity'] = popularity
+    features['year'] = year
     return features
 
 
 def predict_pop(artist, search_query):
     data = get_features(artist, search_query)
-    KEYS = ['acousticness', 'danceability', 'duration_ms', 'energy',
-            'instrumentalness', 'key', 'liveness', 'loudness', 'mode',
-            'speechiness', 'tempo', 'valence']
+    # KEYS = ['acousticness', 'danceability', 'duration_ms', 'energy',
+    #         'instrumentalness', 'key', 'liveness', 'loudness', 'mode',
+    #         'speechiness', 'tempo', 'valence']
+    KEYS = ['acousticness', 'energy', 'loudness', 'year']
     values = [data.get(key) for key in KEYS]
     return model.predict([values])[0]
 
