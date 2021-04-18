@@ -64,10 +64,11 @@ def predict_pop(artist, search_query):
     #         'speechiness', 'tempo', 'valence']
     KEYS = ['acousticness', 'energy', 'loudness', 'year']
     values = [data.get(key) for key in KEYS]
-    return model.predict([values])[0]
+    return model.predict([values])[0] * 2
 
 
 def main():
+    print("Spotify Popularity Predictions")
     artist = input('Enter name of artist: ')
     search_query = input('Enter name of song: ')
     pop = round(predict_pop(artist, search_query))
@@ -75,7 +76,8 @@ def main():
     
     print(f'The predicted popularity is {pop}/100')
     print("Similar Songs (Based on Popularity) Include:")
-    print("\n".join(similar_songs))
+    print("- ", end="")
+    print("\n- ".join(similar_songs))
 
 
 if __name__ == '__main__':
