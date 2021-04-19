@@ -64,7 +64,10 @@ def predict_pop(artist, search_query):
     #         'speechiness', 'tempo', 'valence']
     KEYS = ['acousticness', 'energy', 'loudness', 'year']
     values = [data.get(key) for key in KEYS]
-    return model.predict([values])[0] * 2
+    pred = model.predict([values])[0]
+    if pred > 30:
+        return pred * 2
+    return pred
 
 
 def main():
